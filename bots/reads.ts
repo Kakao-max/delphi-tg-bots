@@ -14,22 +14,8 @@ const ERROR_UNAUTHORIZED = 'ERROR_UNAUTHORIZED';
 const ERROR_UNKNOWN = 'ERROR_UNKNOWN';
 const ERROR_DUPLICATE_READ = 'ERROR_DUPLICATE_READ';
 
-const types: Option<ReadsTag>[] = [
-  { slug: 'reads', title: 'Reads' },
-  { slug: 'media', title: 'Media' },
-  { slug: 'tweets', title: 'Tweets' },
-  { slug: 'news', title: 'News' },
-  { slug: 'podcast', title: 'Podcast' },
-  { slug: 'other', title: 'Other' },
-];
 
-const sectors: Option<SectorSlug>[] = [
-  { slug: 'general', title: 'General' },
-  { slug: 'finance', title: 'DeFi' },
-  { slug: 'infrastructure', title: 'Infrastructure' },
-  { slug: 'macro-markets', title: 'Macro & Markets' },
-  { slug: 'metaverse', title: 'NFTs & Gaming' },
-];
+
 
 const defaultTagsForDomain: Record<string, ReadsTag[]> = {
   'bloomberg.com': ['news'],
