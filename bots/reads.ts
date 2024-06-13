@@ -23,7 +23,13 @@ const types: Option<ReadsTag>[] = [
   { slug: 'other', title: 'Other' },
 ];
 
-
+const sectors: Option<SectorSlug>[] = [
+  { slug: 'general', title: 'General' },
+  { slug: 'finance', title: 'DeFi' },
+  { slug: 'infrastructure', title: 'Infrastructure' },
+  { slug: 'macro-markets', title: 'Macro & Markets' },
+  { slug: 'metaverse', title: 'NFTs & Gaming' },
+];
 
 const defaultTagsForDomain: Record<string, ReadsTag[]> = {
   'bloomberg.com': ['news'],
