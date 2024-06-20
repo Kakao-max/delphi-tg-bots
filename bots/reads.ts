@@ -368,6 +368,17 @@ const handleSetOption = async (ctx: ReadsContext, options: Option<ReadsTag | Sec
   });
 };
 
+const handleSetTaxonomy = async (ctx: ReadsContext) => await handleSetOption(ctx, sectors, 'setsector', 'sector');
+
+const handleSetTag = async (ctx: ReadsContext) => await handleSetOption(ctx, types, 'settype', 'type');
+
+const handleSetTitle = async (ctx: ReadsContext) => {
+  ensureLinkSet(ctx, async () => {
+    ctx.session.state = 'await_title';
+    await ctx.reply('what title do you want?');
+  });
+};
+
 /*
  *
  * Update Handlers
