@@ -385,6 +385,22 @@ const handleSetTitle = async (ctx: ReadsContext) => {
  *
  */
 
+const handleUpdateDescription = async (description: string, ctx: ReadsContext) => {
+  if (description.length > 500) {
+    await ctx.reply('sorry, that description too long');
+    await handleSetDescription(ctx);
+    return;
+  }
+
+  ctx.session.item.description = description === 'none' ? '' : description;
+  await nextBuildState(ctx);
+};
+
+const handleUpdateTitle = async (title: string, ctx: ReadsContext) => {
+  ctx.session.item.title = title;
+  await nextBuildState(ctx);
+};
+
 
 /*
  *
