@@ -368,90 +368,12 @@ const handleSetOption = async (ctx: ReadsContext, options: Option<ReadsTag | Sec
   });
 };
 
-const handleSetTaxonomy = async (ctx: ReadsContext) => await handleSetOption(ctx, sectors, 'setsector', 'sector');
-
-const handleSetTag = async (ctx: ReadsContext) => await handleSetOption(ctx, types, 'settype', 'type');
-
-const handleSetTitle = async (ctx: ReadsContext) => {
-  ensureLinkSet(ctx, async () => {
-    ctx.session.state = 'await_title';
-    await ctx.reply('what title do you want?');
-  });
-};
-
 /*
  *
  * Update Handlers
  *
  */
 
-const handleUpdateDescription = async (description: string, ctx: ReadsContext) => {
-  if (description.length > 500) {
-    await ctx.reply('sorry, that description too long');
-    await handleSetDescription(ctx);
-    return;
-  }
-
-  ctx.session.item.description = description === 'none' ? '' : description;
-  await nextBuildState(ctx);
-};
-
-const handleUpdateTitle = async (title: string, ctx: ReadsContext) => {
-  ctx.session.item.title = title;
-  await nextBuildState(ctx);
-};
-
-const handleUpdateUrl = async (url: string, ctx: ReadsContext, config: ReadsConfig) => {
-  resetState(ctx);
-
-  await ctx.reply('fetching that url, hang on a sec...');
-
-  const cleanUrl = normalizeUrl(url);
-  let metadata: UrlMetadata;
-
-  ctx.session.item.link = cleanUrl;
-
-  try {
-      metadata = await fetchUrlMetadata(cleanUrl, config);
-      await ensureNonDuplicateLink(cleanUrl, config);
-
-      const { description, image, title } = metadata
-      
-      ctx.session.item.title = title || '';
-      ctx.session.item.tags = defaultTagsForUrl(cleanUrl);
-
-      ctx.session.item.description
-        = (description && description.length > 500)
-          ? description.substring(0, 497) + '...'
-          : description || '';
-    
-      ctx.session.item.image_url = image || '';
-  } catch (e) {
-    if (e.message === ERROR_DUPLICATE_READ) {
-      await ctx.reply('Oops, this url was recently added already');
-      resetState(ctx);
-      return;
-    }
-
-    try {
-      const summary = await fetchUrlSummary(cleanUrl, config.openaiApi)
-
-      ctx.session.item.description = summary
-      ctx.session.item.title = cleanUrl
-      ctx.session.item.image_url = ""
-    } catch(err) {
-      if(err.message === OPENAI_ERROR) {
-        await ctx.reply('sorry, I could not fetch that url');
-        await handleNew(ctx);
-        return;
-      }
-    }
-  }
-
-  ctx.session.state = 'build';
-
-  await nextState(ctx);
-};
 
 /*
  *
